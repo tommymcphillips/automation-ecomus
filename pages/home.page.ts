@@ -16,7 +16,7 @@ export class HomePage {
   }
 
   async goto() {
-    await this.page.goto('https://playwright.dev/');
+    await this.page.goto('https://automation-portal-bootcamp.vercel.app/');
   }
 
 }
