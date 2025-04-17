@@ -1,4 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test"; 
+import { CartComponent } from "./cart.component";
+import { LoginPage } from "./login.page";
 
 type ColorOption = 'beige' | 'black' | 'blue' | 'white';
 type SizeOption = 's' | 'm' | 'l' | 'xl';
@@ -9,7 +11,8 @@ export class ProductPage {
     readonly qtyItemSelector: Locator;
     readonly sizeItemSelector: Locator;
     readonly addToCartButton: Locator;
-    
+    readonly cartModal: CartComponent;
+   
     constructor(page:Page){
         this.page = page;
         this.colorPicker = page.locator(

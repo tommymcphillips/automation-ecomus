@@ -4,6 +4,7 @@ import { LoginPage } from '../pages/login.page';
 import { RegisterPage } from '../pages/register.page';
 import { MyAccount } from '../pages/my-account.page';
 import { ProductPage } from '../pages/product.page';
+import { CheckoutPage } from '../pages/checkout.page';
 
 const testEmail = 'tommy@outlook.cl';
 const authToken = 'mi-token-super-secreto';
@@ -39,6 +40,8 @@ const loginPage = new LoginPage(page);
 const registerPage = new RegisterPage(page);
 const myAccount = new MyAccount(page);
 const productPage = new ProductPage(page);
+const checkoutPage = new CheckoutPage(page);
+
 await homePage.goto();
 await homePage.clikKeepMeUpdatedModalCloseButton();
 await homePage.clickProfileIcon();
@@ -52,4 +55,10 @@ await productPage.selectColorFromPicker("white");
 await productPage.setItemQuantity(3);
 await productPage.selectSizeFromPicker('s');
 await productPage.clickAddToCartButton();
+await productPage.cartModal.clickCheckOutButton();
+await checkoutPage.fillBillingDetailsForm('tommy');
+await checkoutPage.applyDicountCode('abc123');
+await checkoutPage.fillCreditCardInformation('','','');
+await checkoutPage.clickPlaceAnOrderButton();
 });
+
