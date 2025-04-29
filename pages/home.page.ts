@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { EnvConfig } from '../env.config';
 
 export class HomePage {
   readonly page: Page;
@@ -14,11 +15,13 @@ export class HomePage {
   }
 
   async goto() {
-    await this.page.goto('https://automation-portal-bootcamp.vercel.app');
+    await this.page.goto(EnvConfig.getBaseUrl());
   }
+
   async clickProfileIcon() {
     await this.profileIcon.click();
   }
+
   async clikKeepMeUpdatedModalCloseButton(){
     await expect(this.keepMeUpdatedModalCloseButton).toBeVisible();
     await this.keepMeUpdatedModalCloseButton.click();
@@ -26,5 +29,4 @@ export class HomePage {
   async clickFirstRaquet(){
     await this.firstRaquet.click();
   }
-  
-}
+ }

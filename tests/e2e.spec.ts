@@ -1,86 +1,78 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 import { HomePage } from '../pages/home.page';
 import { LoginPage } from '../pages/login.page';
 import { RegisterPage } from '../pages/register.page';
 import { MyAccount } from '../pages/my-account.page';
 import { ProductPage } from '../pages/product.page';
 import { CheckoutPage } from '../pages/checkout.page';
+import { UserApiClient } from '../api-clients/user.api-client';
+import { OrderApiClient } from '../api-clients/order.api-client';
 
 const testEmail = 'tommy2@outlook.cl';
 const authToken = 'mi-token-super-secreto';
 
 test.afterEach(async ({ request }) => {
-  // Buscar usuario por email
-  const response = await request.get(
-    `https://automation-portal-bootcamp.vercel.app/api/user?email=${testEmail}`
-  );
-  const user = await response.json();
+  const userApi = new UserApiClient(request);
+
+  const user = await userApi.findUserByEmail(testEmail);
 
   console.log('Usuario encontrado:', user.id);
 
-  let responseDelete;
   if (user.id) {
-    responseDelete = await request.delete(
-      `https://automation-portal-bootcamp.vercel.app/api/user/${user.id}`,
-      {
-        headers: {
-          Authorization: authToken,
-        },
-      }
-    );
-    console.log('Usuario eliminado:', await responseDelete.json());
+    const deletedUser = await userApi.deleteUserById(user.id, authToken);
+    console.log('Usuario eliminado:', deletedUser);
   } else {
     console.log('No se encontró el usuario para eliminar');
   }
 });
 
 test('e2e', async ({ page, request }) => {
-const homePage = new HomePage(page);
-const loginPage = new LoginPage(page);
-const registerPage = new RegisterPage(page);
-const myAccount = new MyAccount(page);
-const productPage = new ProductPage(page);
-const checkoutPage = new CheckoutPage(page);
+  const homePage = new HomePage(page);
+  const loginPage = new LoginPage(page);
+  const registerPage = new RegisterPage(page);
+  const myAccount = new MyAccount(page);
+  const productPage = new ProductPage(page);
+  const checkoutPage = new CheckoutPage(page);
+  const orderApi = new OrderApiClient(request);
 
-await homePage.goto();
-await homePage.clikKeepMeUpdatedModalCloseButton();
-await homePage.clickProfileIcon();
-await loginPage.clickNewCustomerButton();
-await registerPage.fillFormRegister('tommmy', 'mcphillips', testEmail, '123456');
-await loginPage.login(testEmail, '123456');
-await myAccount.clickTopLogo();
-await homePage.clikKeepMeUpdatedModalCloseButton();
-await homePage.clickFirstRaquet();
-await productPage.selectColorFromPicker("white");
-await productPage.setItemQuantity(3);
-await productPage.selectSizeFromPicker('s');
-await productPage.clickAddToCartButton();
-await productPage.cartModal.clickCheckOutButton();
-await checkoutPage.fillBillingDetailsForm(
-  'tommy', 
-  'mcphillips', 
-  'Mexico', 
-  'Rancagua', 
-  'Caupolican 381', 
-  '+569999999', 
-  't.mcphillips@outlook.com', 
-  'que llegue rapido porfa'
-);
-await checkoutPage.applyDicountCode('abc123');
-await checkoutPage.fillCreditCardInformation('4242424242424242','20/20','123');
-await checkoutPage.clickPlaceOrder();
-const messageOfOrderPlaced = await checkoutPage.getPlacedOrderMessage()
-expect(messageOfOrderPlaced).toContain('Order saved successfully! Your order ID is')
+  await homePage.goto();
+  await homePage.clikKeepMeUpdatedModalCloseButton();
+  await homePage.clickProfileIcon();
+  await loginPage.clickNewCustomerButton();
+  await registerPage.fillFormRegister('tommmy', 'mcphillips', testEmail, '123456');
+  await loginPage.login(testEmail, '123456');
+  await myAccount.clickTopLogo();
+  await homePage.clikKeepMeUpdatedModalCloseButton();
+  await homePage.clickFirstRaquet();
+  await productPage.selectColorFromPicker('white');
+  await productPage.setItemQuantity(3);
+  await productPage.selectSizeFromPicker('s');
+  await productPage.clickAddToCartButton();
+  await productPage.cartModal.clickCheckOutButton();
+  await checkoutPage.fillBillingDetailsForm(
+    'tommy', 
+    'mcphillips', 
+    'Mexico', 
+    'Rancagua', 
+    'Caupolican 381', 
+    '+569999999', 
+    't.mcphillips@outlook.com', 
+    'que llegue rapido porfa'
+  );
+  await checkoutPage.applyDicountCode('abc123');
+  await checkoutPage.fillCreditCardInformation('4242424242424242', '20/20', '123');
+  await checkoutPage.clickPlaceOrder();
 
-const orderId = await checkoutPage.getOrderId();
-console.log(orderId)
-const orderResponse = await request.get(
-  `https://automation-portal-bootcamp.vercel.app/api/orders/${orderId}`,
-);
-expect(orderResponse.ok()).toBeTruthy();
+  const messageOfOrderPlaced = await checkoutPage.getPlacedOrderMessage();
+  expect(messageOfOrderPlaced).toContain('Order saved successfully! Your order ID is');
 
-const order = await orderResponse.json();
-console.log(order)
-//Implementar expect para comparar 4 valores del json importante del item 
+  const orderId = await checkoutPage.getOrderId();
+  console.log('Order ID:', orderId);
+
+  const order = await orderApi.getOrderById(orderId);
+  console.log('Order:', order);
+
+  expect(order.items[0].title).toBe('Franklin Signature Pickleball Paddle');
+  expect(order.items[0].price).toBe(100);
+  expect(order.items[0].quantity).toBe(4);
 });
-

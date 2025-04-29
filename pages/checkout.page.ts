@@ -145,6 +145,6 @@ export class CheckoutPage {
         const msg = await this.getPlacedOrderMessage();
         // Dividimos por ":" y tomamos la última parte, luego eliminamos espacios
         const parts = msg.split(':');
-        return parts[parts.length - 1].trim();
+        return parts[1].trim();
       }
 }
