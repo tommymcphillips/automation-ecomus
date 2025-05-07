@@ -15,4 +15,8 @@ export class MyAccount {
       await this.topLogoImage.click();
     }
 
+    async getTitle() {
+      return await this.page.title();
+    }
+
 }

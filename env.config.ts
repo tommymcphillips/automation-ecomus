@@ -12,11 +12,20 @@ export class EnvConfig {
     return this.getEnvVar('BASE_URL');
   }
 
-  static getUser(): string {
-    return this.getEnvVar('USER_ECOM');
+  static getValidUser(): string {
+    return this.getEnvVar('USER_VALID_ECOM');
   }
 
-  static getPass(): string {
-    return this.getEnvVar('PASS_ECOM');
+  static getValidPass(): string {
+    return this.getEnvVar('PASS_VALID_ECOM');
   }
+
+  static getInvalidUser(): string {
+    return this.getEnvVar('USER_INVALID_ECOM');
+  }
+
+  static getInvalidPass(): string {
+    return this.getEnvVar('PASS_INVALID_ECOM');
+  }
+
 }

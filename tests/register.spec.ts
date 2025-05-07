@@ -41,18 +41,3 @@ test('debería mostrar un alert luego de registrar', async ({ page }) => {
   expect(resultedDialogMessage).toBe(expectedDialogMessage);
 });
 
-test('debería mostrar un alert luego de registrar', async ({ page }) => {
-  const registerPage = new RegisterPage(page);
-
-  await registerPage.goTo();
-  await registerPage.fillName('tommy');
-  await registerPage.fillLastName('McPhillips');
-  await registerPage.fillEmail(testEmail);
-  await registerPage.fillPassword('password123');
-  await registerPage.clickRegisterButton();
-
-  const resultedDialogMessage = await registerPage.waitForAlertAfterSubmit();
-  const expectedDialogMessage = "Registration successful! Redirecting to login...";
-  expect(resultedDialogMessage).toBe(expectedDialogMessage);
-});
-
