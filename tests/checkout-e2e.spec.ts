@@ -106,7 +106,7 @@ test.describe('@e2e', () => {
     await homePage.clickProfileIcon();
     await loginPage.clickNewCustomerButton();
     await registerPage.fillFormRegister('tommmy', 'mcphillips', testEmail2, '123456');
-    await loginPage.login(testEmail, '123456'); // Usa testEmail (no testEmail2) aquí, ¿intencional?
+    await loginPage.login(testEmail2, '123456'); // Usa testEmail (no testEmail2) aquí, ¿intencional?
     await myAccount.clickTopLogo();
     await homePage.clikKeepMeUpdatedModalCloseButton();
     await homePage.clickFirstRaquet();
