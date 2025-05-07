@@ -12,6 +12,21 @@ const testEmail = 'tommy10@outlook.cl';
 const testEmail2 = 'tommy11@outlook.cl';
 const authToken = 'mi-token-super-secreto';
 
+test.beforeAll(async ({ request }) => {
+  const userApi = new UserApiClient(request);
+
+  for (const email of [testEmail, testEmail2]) {
+    const user = await userApi.findUserByEmail(email);
+
+    if (user?.id) {
+      const deletedUser = await userApi.deleteUserById(user.id, authToken);
+      console.log(`Usuario ${email} eliminado:`, deletedUser);
+    } else {
+      console.log(`Usuario ${email} no encontrado.`);
+    }
+  }
+});
+
 test.afterEach(async ({ request }) => {
   const userApi = new UserApiClient(request);
   const user = await userApi.findUserByEmail(testEmail);
