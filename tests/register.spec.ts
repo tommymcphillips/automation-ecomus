@@ -25,19 +25,20 @@ test.afterEach(async ({ request }) => {
 
   console.log(await responseDelete.json())
 });
+test.describe('@functional' , () => { 
+  test('debería mostrar un alert luego de registrar', async ({ page }) => {
+    const registerPage = new RegisterPage(page);
 
-test('debería mostrar un alert luego de registrar', async ({ page }) => {
-  const registerPage = new RegisterPage(page);
+    await registerPage.goTo();
+    await registerPage.fillName('tommy');
+    await registerPage.fillLastName('McPhillips');
+    await registerPage.fillEmail(testEmail);
+    await registerPage.fillPassword('password123');
+    await registerPage.clickRegisterButton();
 
-  await registerPage.goTo();
-  await registerPage.fillName('tommy');
-  await registerPage.fillLastName('McPhillips');
-  await registerPage.fillEmail(testEmail);
-  await registerPage.fillPassword('password123');
-  await registerPage.clickRegisterButton();
-
-  const resultedDialogMessage = await registerPage.waitForAlertAfterSubmit();
-  const expectedDialogMessage = "Registration successful! Redirecting to login...";
-  expect(resultedDialogMessage).toBe(expectedDialogMessage);
+    const resultedDialogMessage = await registerPage.waitForAlertAfterSubmit();
+    const expectedDialogMessage = "Registration successful! Redirecting to login...";
+    expect(resultedDialogMessage).toBe(expectedDialogMessage);
+  });
 });
 

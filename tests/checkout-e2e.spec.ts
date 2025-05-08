@@ -27,20 +27,6 @@ test.beforeAll(async ({ request }) => {
   }
 });
 
-test.afterEach(async ({ request }) => {
-  const userApi = new UserApiClient(request);
-  const user = await userApi.findUserByEmail(testEmail);
-
-  console.log('Usuario encontrado:', user.id);
-
-  if (user.id) {
-    const deletedUser = await userApi.deleteUserById(user.id, authToken);
-    console.log('Usuario eliminado:', deletedUser);
-  } else {
-    console.log('No se encontró el usuario para eliminar');
-  }
-});
-
 test.describe('@e2e', () => {
   test('doing a checkout e2e successfully', async ({ page, request }) => {
     const homePage = new HomePage(page);

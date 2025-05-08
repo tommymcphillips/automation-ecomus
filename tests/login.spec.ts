@@ -25,4 +25,14 @@ test.describe('@functional' , () => {
     await loginPage.clickLoginButton();
     await expect(page).toHaveTitle('Login || Ecomus - Ultimate Nextjs Ecommerce Template');
   });
+
+  test('login en blanco', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+  
+    await loginPage.goto();
+    await loginPage.fillEmailTextFiled("");
+    await loginPage.fillPasswordTextField("");
+    await loginPage.clickLoginButton();
+    await expect(page).toHaveTitle('Login || Ecomus - Ultimate Nextjs Ecommerce Template');
+  });
 });
