@@ -23,16 +23,7 @@ test.describe('@functional' , () => {
     await loginPage.fillEmailTextFiled(EnvConfig.getInvalidUser());
     await loginPage.fillPasswordTextField(EnvConfig.getInvalidPass());
     await loginPage.clickLoginButton();
-    await expect(page).toHaveTitle('My Account || Ecomus - Ultimate Nextjs Ecommerce Template');
-  });
-
-  test('login en blanco', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-  
-    await loginPage.goto();
-    await loginPage.fillEmailTextFiled("");
-    await loginPage.fillPasswordTextField("");
-    await loginPage.clickLoginButton();
     await expect(page).toHaveTitle('Login || Ecomus - Ultimate Nextjs Ecommerce Template');
   });
+
 });

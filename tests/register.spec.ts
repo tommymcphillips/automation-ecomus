@@ -22,7 +22,6 @@ test.afterEach(async ({ request }) => {
     console.log("FALLAMOS ELIMINADO EL USARIO")
   }
   
-
   console.log(await responseDelete.json())
 });
 test.describe('@functional' , () => { 
